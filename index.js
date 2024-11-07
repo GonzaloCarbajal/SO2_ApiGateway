@@ -2,10 +2,14 @@
 import express from 'express';
 import axios from 'axios';
 import orders from './Orders/Orders.js'; // Importa correctamente el router de Orders.js
+import discounts from './Discount/Discount.js';
+import items from './Item/Item.js';
+import rankings from './Ranking/Ranking.js';
 import auth from './Auth/Auth.js';
 import cors from "cors";
 
 const app = express();
+app.use(express.json());//Para que procese el body
 
 // Habilita CORS para todas las rutas
 //app.use(cors());
@@ -42,8 +46,11 @@ app.get('/api/v1/ranking', async (req, res) => {
     }
 });
 
-// Usar el router de `Orders.js` como middleware
+
 app.use("/orders", orders);
+app.use("/discounts", discounts);
+app.use("/items", items);
+app.use("/rankings", rankings);
 
 // Usar el router de `Auth.js` como middleware
 app.use("/auth", auth);
