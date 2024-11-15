@@ -3,11 +3,12 @@ import axios from 'axios';
 import express from 'express';
 const router = express.Router();
 import validateToken from '../../Middleware/validateToken.js';
+import fetch from "node-fetch";
 
 router.post("/", validateToken , async (req, res) => {
     try {
         console.log('body', req.body )
-
+        /*
         const orderData = {
             order_id: "12345", // Reemplaza con el valor real
             user_id: "67890",  // Reemplaza con el valor real
@@ -23,7 +24,30 @@ router.post("/", validateToken , async (req, res) => {
             updated_at: new Date().toISOString() // Fecha de actualización en formato ISO
         };
 
-        res.status(201).json(orderData);
+         */
+
+
+        // Configuración de la solicitud
+        const data = req.body;
+        const url = 'http://localhost:7000/api/v1/';
+        const options = {
+            method: 'POST',  // Método HTTP
+            headers: {
+                'Content-Type': 'application/json',  // Tipo de contenido
+            }, body: JSON.stringify(data)  // Cuerpo de la solicitud
+        };
+
+        // Realizar la solicitud
+        fetch(url, options)
+            .then(response => response.json())  // Convertir la respuesta a formato JSON
+            .then(data => {
+                console.log('Respuesta de la API:', data);
+                res.status(201).json(data);
+            })
+            .catch(error => {
+                const messageError = error.message;
+                res.status(500).json({error: `Primer Error al hacer la petición: ${messageError}`});
+            });
     } catch (error) {
         console.error('Error al hacer la petición:', error.message);
         res.status(500).json({ error: 'Error al obtener datos de la API Orders' });
@@ -31,8 +55,9 @@ router.post("/", validateToken , async (req, res) => {
 });
 
 // Ruta con el middleware
-router.get("/order/:id", validateToken, async (req, res) => {
+router.get("/:id", validateToken, async (req, res) => {
     try {
+        /*
         const orderData = [
             {
                 user_id: 123,
@@ -65,14 +90,42 @@ router.get("/order/:id", validateToken, async (req, res) => {
         ];
 
         res.status(200).json(orderData);
+
+         */
+
+
+        const id = req.params.id;
+        console.log('id', id);
+
+        // URL de la API
+        const url = `http://localhost:7000/api/v1/${id}`;
+
+
+        // Realizar la solicitud GET
+        fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json(); // Convertir la respuesta a JSON
+            })
+            .then(data => {
+                console.log('Datos recibidos:', data);  // Mostrar los datos recibidos
+                res.status(200).json(data);
+            })
+            .catch(error => {
+                const messageError = error.message;
+                res.status(500).json({error: `Error al hacer la petición: ${messageError}`});
+            });
     } catch (error) {
         console.error('Error al hacer la petición:', error.message);
         res.status(500).json({ error: 'Error prueba' });
     }
 });
 
-router.get("/orders", validateToken, async (req, res) => {
+router.get("/", validateToken, async (req, res) => {
     try {
+    /*
         const orderData = [
             {
                 user_id: 123,
@@ -105,6 +158,33 @@ router.get("/orders", validateToken, async (req, res) => {
         ];
 
         res.status(200).json(orderData);
+
+     */
+
+
+        // URL de la API
+        const url = `http://localhost:7000/api/v1/`;
+
+
+        // Realizar la solicitud GET
+        fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json(); // Convertir la respuesta a JSON
+            })
+            .then(data => {
+                console.log('Datos recibidos:', data);  // Mostrar los datos recibidos
+                res.status(200).json(data);
+            })
+            .catch(error => {
+                const messageError = error.message;
+                res.status(500).json({error: `Error al hacer la petición: ${messageError}`});
+            });
+
+
+
     } catch (error) {
         console.error('Error al hacer la petición:', error.message);
         res.status(500).json({ error: 'Error prueba' });

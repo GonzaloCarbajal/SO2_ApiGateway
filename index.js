@@ -5,7 +5,6 @@ import orders from './Orders/Orders.js'; // Importa correctamente el router de O
 import discounts from './Discount/Discount.js';
 import items from './Item/Item.js';
 import rankings from './Ranking/Ranking.js';
-import auth from './Auth/Auth.js';
 import cors from "cors";
 
 const app = express();
@@ -51,9 +50,6 @@ app.use("/orders", orders);
 app.use("/discounts", discounts);
 app.use("/items", items);
 app.use("/rankings", rankings);
-
-// Usar el router de `Auth.js` como middleware
-app.use("/auth", auth);
 
 const PORT = 3000;
 app.listen(PORT, () => {
